@@ -1,4 +1,4 @@
-const PORT = process.env.PORT || 9000
+const PORT = process.env.PORT || 50001
 
 // log unhandled errors
 process.on('unhandledRejection', error => {
@@ -24,9 +24,9 @@ const appPath = path.join(__dirname, '../../', 'build')
 
 const min = 60 * 1000
 const ether = 1e18
-const faucetAmountWei = (1 * ether)
+const faucetAmountWei = (10 * ether)
 const EtherBN = new BN('1000000000000000000', 10)
-const MAX_BALANCE = EtherBN.mul(new BN('4', 10))
+const MAX_BALANCE = EtherBN.mul(new BN('100', 10))
 const AUTO_RESTART_INTERVAL = 60 * min
 
 console.log('Acting as faucet for address:', config.address)
@@ -69,7 +69,7 @@ function startServer () {
 
   // start server
   const server = app.listen(PORT, function () {
-    console.log('ethereum rpc listening on', PORT)
+    console.log('spike chain rpc listening on', PORT)
     console.log('and proxying to', config.rpcOrigin)
   })
 
@@ -113,11 +113,12 @@ function startServer () {
       const balance = await ethQuery.getBalance(targetAddress, 'pending')
       const balanceTooFull = balance.gt(MAX_BALANCE)
       if (balanceTooFull) {
-        console.log(`${requestorMessage} - already has too much ether`)
-        return didError(res, new Error('User is greedy - already has too much ether'))
+        console.log(`${requestorMessage} - already has too much spk`)
+        return didError(res, new Error('User is greedy - already has too much spk'))
       }
       // send value
       const txHash = await ethQuery.sendTransaction({
+        chainId: 9090,
         to: targetAddress,
         from: config.address,
         value: faucetAmountWei,

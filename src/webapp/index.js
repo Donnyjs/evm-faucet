@@ -144,7 +144,7 @@ function renderApp () {
   render([
 
     h('nav.navbar.navbar-default', [
-      h('h1.container-fluid', 'MetaMask Ether Faucet')
+      h('h1.container-fluid', 'Spike Chain Faucet')
     ]),
 
     h('section.container', [
@@ -156,12 +156,12 @@ function renderApp () {
         h('div.panel-body', [
           h('div', 'address: ' + state.faucetAddress),
           h('div', 'balance: ' + formatBalance(state.faucetBalance)),
-          h('button.btn.btn-success', 'request 1 ether from faucet', {
+          h('button.btn.btn-success', 'request 10 spk from faucet', {
             style: {
               margin: '4px'
             },
             // disabled: state.userAddress ? null : true,
-            click: getEther
+            click: getSpk
           })
         ])
       ]),
@@ -174,21 +174,21 @@ function renderApp () {
           h('div', 'address: ' + state.userAddress),
           h('div', 'balance: ' + formatBalance(state.fromBalance)),
           h('div', 'donate to faucet:'),
-          h('button.btn.btn-warning', '1 ether', {
+          h('button.btn.btn-warning', '1 spk', {
             style: {
               margin: '4px'
             },
             // disabled: state.userAddress ? null : true,
             click: sendTx.bind(null, 1)
           }),
-          h('button.btn.btn-warning', '10 ether', {
+          h('button.btn.btn-warning', '10 spk', {
             style: {
               margin: '4px'
             },
             // disabled: state.userAddress ? null : true,
             click: sendTx.bind(null, 10)
           }),
-          h('button.btn.btn-warning', '100 ether', {
+          h('button.btn.btn-warning', '100 spk', {
             style: {
               margin: '4px'
             },
@@ -209,7 +209,7 @@ function renderApp () {
           }
         }, (
           state.transactions.map((txHash) => {
-            return link(`https://ropsten.etherscan.io/tx/${txHash}`, txHash)
+            return link(`http://119.13.91.31:4001/tx/${txHash}`, txHash)
           })
         ))
       ])
@@ -225,7 +225,7 @@ function link (url, content) {
   return h('a', { href: url, target: '_blank' }, content)
 }
 
-async function getEther () {
+async function getSpk () {
   const account = await requestAccounts()
 
   // We already prompted to unlock in requestAccounts()
@@ -235,7 +235,7 @@ async function getEther () {
   var data = account
 
   let res, body, err
-  
+
   try {
     res = await fetch(uri, {
       method: 'POST',
@@ -287,6 +287,7 @@ async function sendTx (value) {
   if (!address) return
 
   global.ethQuery.sendTransaction({
+    chainId: 9090,
     from: address,
     to: state.faucetAddress,
     value: '0x' + (value * 1e18).toString(16)
@@ -314,5 +315,5 @@ function render (elements) {
 }
 
 function formatBalance (balance) {
-  return balance ? balance + ' ether' : '...'
+  return balance ? balance + ' spk' : '...'
 }
