@@ -40,8 +40,8 @@ function startApp () {
   global.provider = provider
 
   renderApp()
-  updateStateFromNetwork()
-  setInterval(updateStateFromNetwork, 4000)
+  //updateStateFromNetwork()
+  //setInterval(updateStateFromNetwork, 4000)
 }
 
 function updateStateFromNetwork () {
@@ -154,8 +154,15 @@ function renderApp () {
           h('h3', 'faucet')
         ]),
         h('div.panel-body', [
-          h('div', 'address: ' + state.faucetAddress),
-          h('div', 'balance: ' + formatBalance(state.faucetBalance)),
+          h('input', 'address: ', {
+            style: {
+              width: '400px',
+            },
+            id: "walletAddressInputId",
+            type: 'text',
+            placeholder: 'wallet address',
+          }),
+          //h('div', 'balance: ' + formatBalance(state.faucetBalance)),
           h('button.btn.btn-success', 'request 10 spk from faucet', {
             style: {
               margin: '4px'
@@ -166,37 +173,37 @@ function renderApp () {
         ])
       ]),
 
-      h('div.panel.panel-default', [
-        h('div.panel-heading', [
-          h('h3', 'user')
-        ]),
-        h('div.panel-body', [
-          h('div', 'address: ' + state.userAddress),
-          h('div', 'balance: ' + formatBalance(state.fromBalance)),
-          h('div', 'donate to faucet:'),
-          h('button.btn.btn-warning', '1 spk', {
-            style: {
-              margin: '4px'
-            },
-            // disabled: state.userAddress ? null : true,
-            click: sendTx.bind(null, 1)
-          }),
-          h('button.btn.btn-warning', '10 spk', {
-            style: {
-              margin: '4px'
-            },
-            // disabled: state.userAddress ? null : true,
-            click: sendTx.bind(null, 10)
-          }),
-          h('button.btn.btn-warning', '100 spk', {
-            style: {
-              margin: '4px'
-            },
-            // disabled: state.userAddress ? null : true,
-            click: sendTx.bind(null, 100)
-          })
-        ])
-      ]),
+      // h('div.panel.panel-default', [
+      //   h('div.panel-heading', [
+      //     h('h3', 'user')
+      //   ]),
+      //   h('div.panel-body', [
+      //     h('div', 'address: ' + state.userAddress),
+      //     h('div', 'balance: ' + formatBalance(state.fromBalance)),
+      //     h('div', 'donate to faucet:'),
+      //     h('button.btn.btn-warning', '1 spk', {
+      //       style: {
+      //         margin: '4px'
+      //       },
+      //       // disabled: state.userAddress ? null : true,
+      //       click: sendTx.bind(null, 1)
+      //     }),
+      //     h('button.btn.btn-warning', '10 spk', {
+      //       style: {
+      //         margin: '4px'
+      //       },
+      //       // disabled: state.userAddress ? null : true,
+      //       click: sendTx.bind(null, 10)
+      //     }),
+      //     h('button.btn.btn-warning', '100 spk', {
+      //       style: {
+      //         margin: '4px'
+      //       },
+      //       // disabled: state.userAddress ? null : true,
+      //       click: sendTx.bind(null, 100)
+      //     })
+      //   ])
+      // ]),
 
       h('div.panel.panel-default', [
         h('div.panel-heading', [
@@ -226,15 +233,18 @@ function link (url, content) {
 }
 
 async function getSpk () {
-  const account = await requestAccounts()
-
+  //const account = await requestAccounts()
+  var input = document.getElementById('walletAddressInputId')
+  const account = input.value
+  console.log('accout : ', account)
   // We already prompted to unlock in requestAccounts()
-  if (!account) return
+  //if (!account) return
 
   var uri = `${window.location.href}v0/request`
   var data = account
 
   let res, body, err
+  //console.log("uri:", uri)
 
   try {
     res = await fetch(uri, {
