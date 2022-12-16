@@ -19,6 +19,7 @@ const geoIp = require('@pablopunk/geo-ip')
 const emojiFlag = require('emoji-flag')
 const config = require('./get-config')
 const rpcWrapperEngine = require('./engine.js')
+const bech32 = require('bech32-buffer')
 
 const appPath = path.join(__dirname, '../../', 'build')
 
@@ -89,6 +90,11 @@ function startServer () {
       if (!targetAddress || typeof targetAddress !== 'string') {
         return didError(res, new Error(`Address parse failure - request body empty`))
       }
+      if (targetAddress.slice(0, 5) === 'spike') {
+          let data = bech32.decode(targetAddress)
+          targetAddress = Bytes2Str(data.data)
+      }
+
       if (targetAddress.slice(0, 2) !== '0x') {
         targetAddress = '0x' + targetAddress
       }
@@ -149,4 +155,22 @@ function startServer () {
       process.exit(0)
     })
   }
+}
+
+function Bytes2Str(arrBytes){
+  var str = "";
+  for (var i = 0; i < arrBytes.length; i++) {
+    var tmp;
+    var num = arrBytes[i];
+    if (num < 0) {
+      tmp = (255 + num + 1).toString(16);
+    } else {
+      tmp = num.toString(16);
+    }
+    if (tmp.length == 1) {
+      tmp = "0" + tmp;
+    }
+    str += tmp;
+  }
+  return str;
 }

@@ -40,8 +40,8 @@ function startApp () {
   global.provider = provider
 
   renderApp()
-  //updateStateFromNetwork()
-  //setInterval(updateStateFromNetwork, 4000)
+  // updateStateFromNetwork()
+  // setInterval(updateStateFromNetwork, 4000)
 }
 
 function updateStateFromNetwork () {
@@ -162,7 +162,7 @@ function renderApp () {
             type: 'text',
             placeholder: 'wallet address',
           }),
-          //h('div', 'balance: ' + formatBalance(state.faucetBalance)),
+          // h('div', 'balance: ' + formatBalance(state.faucetBalance)),
           h('button.btn.btn-success', 'request 10 spk from faucet', {
             style: {
               margin: '4px'
@@ -216,7 +216,7 @@ function renderApp () {
           }
         }, (
           state.transactions.map((txHash) => {
-            return link(`http://119.13.91.31:4001/tx/${txHash}`, txHash)
+            return link(`https://evm.spike.network/tx/${txHash}`, txHash)
           })
         ))
       ])
@@ -233,18 +233,18 @@ function link (url, content) {
 }
 
 async function getSpk () {
-  //const account = await requestAccounts()
+  // const account = await requestAccounts()
   var input = document.getElementById('walletAddressInputId')
   const account = input.value
   console.log('accout : ', account)
   // We already prompted to unlock in requestAccounts()
-  //if (!account) return
+  // if (!account) return
 
   var uri = `${window.location.href}v0/request`
   var data = account
 
   let res, body, err
-  //console.log("uri:", uri)
+  // console.log("uri:", uri)
 
   try {
     res = await fetch(uri, {
