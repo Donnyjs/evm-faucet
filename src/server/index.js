@@ -80,7 +80,7 @@ function startServer () {
   // Force an exit (docker will trigger a restart)
   setTimeout(() => {
     console.log('Restarting for better nonce tracking')
-    shutdown()
+   // shutdown()
   }, AUTO_RESTART_INTERVAL)
 
   async function handleRequest (req, res) {
@@ -149,11 +149,11 @@ function startServer () {
 
   // Do graceful shutdown
   function shutdown () {
-    console.log('gracefully shutting down...')
-    server.close(() => {
-      console.log('shut down complete.')
-      process.exit(0)
-    })
+    // console.log('gracefully shutting down...')
+    // server.close(() => {
+    //   console.log('shut down complete.')
+    //   process.exit(0)
+    // })
   }
 }
 
