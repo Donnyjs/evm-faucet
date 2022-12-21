@@ -57,6 +57,7 @@ function getNetwork () {
     if (res.error) return console.res.error(res.error)
     var network = res.result
     state.network = network
+    console.log("network: ",network)
     renderApp()
   })
 }
@@ -144,7 +145,13 @@ function renderApp () {
   render([
 
     h('nav.navbar.navbar-default', [
-      h('h1.container-fluid', 'Spike Chain Faucet')
+      h('h1.container-fluid', 'Spike Chain Faucet'),
+      h('button.btn.btn-success', 'add Spike Testnet', {
+            style: {
+              margin: '15px'
+            },
+            click: addNetWork
+          })
     ]),
 
     h('section.container', [
@@ -326,4 +333,24 @@ function render (elements) {
 
 function formatBalance (balance) {
   return balance ? balance + ' spk' : '...'
+}
+
+
+function addNetWork (){
+  console.log("add network")
+  window.ethereum.request({
+    method: 'wallet_addEthereumChain',
+    params: [{
+      chainId: "0x2382",
+      chainName: "Spike Chain Testnet",
+      rpcUrls: [
+        'https://rpc.evm.spike.network',
+      ],
+      nativeCurrency: {
+        name: 'spike',
+        symbol: 'spk',
+        decimals: 18,
+      }
+    }]
+  })
 }
