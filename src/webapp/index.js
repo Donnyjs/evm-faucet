@@ -243,7 +243,6 @@ async function getSpk () {
   // const account = await requestAccounts()
   var input = document.getElementById('walletAddressInputId')
   const account = input.value
-  console.log('accout : ', account)
   // We already prompted to unlock in requestAccounts()
   // if (!account) return
 
@@ -251,8 +250,6 @@ async function getSpk () {
   var data = account
 
   let res, body, err
-  // console.log("uri:", uri)
-
   try {
     res = await fetch(uri, {
       method: 'POST',
@@ -261,8 +258,12 @@ async function getSpk () {
         'Content-Type': 'application/rawdata'
       }
     })
+    console.log("uri111:", uri)
     body = await res.text()
+    console.log("uri222:", uri)
+    console.log("body:", body)
   } catch (error) {
+    console.log("err:", error)
     err = error
   }
 
@@ -273,11 +274,13 @@ async function getSpk () {
   }
 
   if (res.status === 420) {
+    console.log("420:", 420)
     state.errorMessage = `Being ratelimited... try again later`
     return
   }
 
   if (!res.ok) {
+    console.log("!ok:")
     state.errorMessage = `Error: ${res.status} ${res.statusText} ${body}`
     return
   }
@@ -291,6 +294,7 @@ async function getSpk () {
       state.errorMessage = body
     }
   } catch (err) {
+    console.log("421:", 421)
     state.errorMessage = err || err.stack
   }
 
@@ -304,7 +308,7 @@ async function sendTx (value) {
   if (!address) return
 
   global.ethQuery.sendTransaction({
-    chainId: 9090,
+    chainId: 32382,
     from: address,
     to: state.faucetAddress,
     value: '0x' + (value * 1e18).toString(16)
@@ -341,10 +345,10 @@ function addNetWork (){
   window.ethereum.request({
     method: 'wallet_addEthereumChain',
     params: [{
-      chainId: "0x2382",
+      chainId: "0x7e7e",//32382
       chainName: "Spike Chain Testnet",
       rpcUrls: [
-        'https://rpc.evm.spike.network',
+        'https://chris.spike.network:8545',
       ],
       nativeCurrency: {
         name: 'spike',

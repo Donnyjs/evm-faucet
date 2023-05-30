@@ -27,7 +27,7 @@ const min = 60 * 1000
 const ether = 1e18
 const faucetAmountWei = (10 * ether)
 const EtherBN = new BN('1000000000000000000', 10)
-const MAX_BALANCE = EtherBN.mul(new BN('100', 10))
+const MAX_BALANCE = EtherBN.mul(new BN('1000000', 10))
 const AUTO_RESTART_INTERVAL = 60 * min
 
 console.log('Acting as faucet for address:', config.address)
@@ -87,23 +87,30 @@ function startServer () {
     try {
       // parse address
       let targetAddress = req.body
+      console.log("targetaddress: ", targetAddress)
       if (!targetAddress || typeof targetAddress !== 'string') {
         return didError(res, new Error(`Address parse failure - request body empty`))
       }
-      if (targetAddress.slice(0, 5) === 'spike') {
-          let data = bech32.decode(targetAddress)
-          targetAddress = Bytes2Str(data.data)
-      }
+      // if (targetAddress.slice(0, 5) === 'spike') {
+      //     let data = bech32.decode(targetAddress)
+      //     targetAddress = Bytes2Str(data.data)
+      // }
+      console.log("targetaddress: ", targetAddress)
+
 
       if (targetAddress.slice(0, 2) !== '0x') {
         targetAddress = '0x' + targetAddress
       }
+      console.log("targetaddress: ", targetAddress)
+
       if (targetAddress.length !== 42) {
         return didError(res, new Error(`Address parse failure - "${targetAddress}"`))
       }
+      console.log("address: ", targetAddress)
       // parse ip-address
       const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress
       // get flag for ip-address
+      console.log("ipAddress: ", ipAddress)
       let flag
       try {
         const geoData = geoIp({ ip: ipAddress })
@@ -117,6 +124,7 @@ function startServer () {
       const requestorMessage = `${flag} ${alignedIpAddress} requesting for ${targetAddress}`
       // check for greediness
       const balance = await ethQuery.getBalance(targetAddress, 'pending')
+      console.log("balance: ", balance)
       const balanceTooFull = balance.gt(MAX_BALANCE)
       if (balanceTooFull) {
         console.log(`${requestorMessage} - already has too much spk`)
@@ -124,7 +132,7 @@ function startServer () {
       }
       // send value
       const txHash = await ethQuery.sendTransaction({
-        chainId: 9090,
+        chainId: 32382,
         to: targetAddress,
         from: config.address,
         value: faucetAmountWei,
