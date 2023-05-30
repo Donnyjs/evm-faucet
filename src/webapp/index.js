@@ -258,12 +258,8 @@ async function getSpk () {
         'Content-Type': 'application/rawdata'
       }
     })
-    console.log("uri111:", uri)
     body = await res.text()
-    console.log("uri222:", uri)
-    console.log("body:", body)
   } catch (error) {
-    console.log("err:", error)
     err = error
   }
 
@@ -274,13 +270,11 @@ async function getSpk () {
   }
 
   if (res.status === 420) {
-    console.log("420:", 420)
     state.errorMessage = `Being ratelimited... try again later`
     return
   }
 
   if (!res.ok) {
-    console.log("!ok:")
     state.errorMessage = `Error: ${res.status} ${res.statusText} ${body}`
     return
   }
@@ -294,13 +288,12 @@ async function getSpk () {
       state.errorMessage = body
     }
   } catch (err) {
-    console.log("421:", 421)
     state.errorMessage = err || err.stack
   }
 
   // display tx hash
   console.log('faucet response:', body)
-  updateStateFromNetwork()
+  //updateStateFromNetwork()
 }
 
 async function sendTx (value) {
@@ -320,7 +313,7 @@ async function sendTx (value) {
       state.errorMessage = null
       state.transactions.push(txHash)
     }
-    updateStateFromNetwork()
+    //updateStateFromNetwork()
   })
 }
 
@@ -348,7 +341,7 @@ function addNetWork (){
       chainId: "0x7e7e",//32382
       chainName: "Spike Chain Testnet",
       rpcUrls: [
-        'https://chris.spike.network:8545',
+        'http://159.138.132.65:8545',
       ],
       nativeCurrency: {
         name: 'spike',

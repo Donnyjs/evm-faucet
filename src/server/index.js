@@ -1,4 +1,4 @@
-const PORT = process.env.PORT || 50001
+const PORT = process.env.PORT || 3000
 
 // log unhandled errors
 process.on('unhandledRejection', error => {
@@ -25,7 +25,7 @@ const appPath = path.join(__dirname, '../../', 'build')
 
 const min = 60 * 1000
 const ether = 1e18
-const faucetAmountWei = (10 * ether)
+const faucetAmountWei = (32 * ether)
 const EtherBN = new BN('1000000000000000000', 10)
 const MAX_BALANCE = EtherBN.mul(new BN('1000000', 10))
 const AUTO_RESTART_INTERVAL = 60 * min
@@ -87,7 +87,6 @@ function startServer () {
     try {
       // parse address
       let targetAddress = req.body
-      console.log("targetaddress: ", targetAddress)
       if (!targetAddress || typeof targetAddress !== 'string') {
         return didError(res, new Error(`Address parse failure - request body empty`))
       }
@@ -95,7 +94,6 @@ function startServer () {
       //     let data = bech32.decode(targetAddress)
       //     targetAddress = Bytes2Str(data.data)
       // }
-      console.log("targetaddress: ", targetAddress)
 
 
       if (targetAddress.slice(0, 2) !== '0x') {
